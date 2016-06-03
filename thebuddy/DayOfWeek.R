@@ -1,0 +1,11 @@
+library(dplyr)
+myfile = read.csv2(file = "ExcelFileFiverr.csv",sep = ",")
+
+mydata = tbl_df(myfile)
+mydatag <- group_by(mydata,WeekDay)
+inshort = summarise(mydatag,n = n())
+inshort = within(inshort, WeekDay <- factor(WeekDay, labels=c("Sun", "Mon", "Tue","Wed","Thu", "Fri","Sat")))
+write.table(x = inshort,file = "Summary.csv",sep = ",",quote = FALSE,row.names = FALSE)
+barplot(inshort$n,names.arg = inshort$WeekDay,col = inshort$WeekDay)
+dev.copy(png,file = "WeekDay.png")
+dev.off()
